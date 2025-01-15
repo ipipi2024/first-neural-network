@@ -1,6 +1,8 @@
 import numpy
 import scipy.special as sp
 
+numpy.random.seed(42)  # setting the seed so weight initialization is constant or reproducible
+
 #neural network class definition
 class neuralNetwork:
     #initialise the neural network
