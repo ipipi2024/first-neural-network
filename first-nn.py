@@ -75,6 +75,15 @@ class neuralNetwork:
         final_outputs = self.activation_function(final_inputs)
 
         return final_outputs
+    
+     # Evaluate performance using Mean Squared Error (MSE)
+    def evaluate(self, test_data):
+        total_error = 0
+        for inputs, targets in test_data:
+            outputs = self.query(inputs)
+            total_error += numpy.mean((numpy.array(targets, ndmin=2).T - outputs) ** 2)
+        mse = total_error / len(test_data)
+        return mse
 
 
 #number of input, hidden and output nodes
@@ -88,10 +97,33 @@ learning_rate = 0.3
 # create instance of neural network
 n = neuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 
-n.train([0.3,0.2,0.1], [0.6,0.4,0.2])
+train_data = [
+    ([0.3, 0.2, 0.1], [0.6, 0.4, 0.2]),
+    ([0.25, 0.4, 0.3], [0.5, 0.8, 0.6]),
+    ([0.1, 0.35, 0.15], [0.2, 0.7, 0.3])
+]
 
-result = n.query([0.1,0.4,0.25])
+# Testing data
+test_data = [
+    ([0.32, 0.22, 0.12], [0.64, 0.44, 0.24]),
+    ([0.28, 0.38, 0.29], [0.56, 0.76, 0.58])
+]
 
+# Number of training iterations
+iterations = 5000
+
+# Train the network
+for _ in range(iterations):
+    for inputs, targets in train_data:
+        n.train(inputs, targets)
+
+# Evaluate performance
+mse = n.evaluate(test_data)
+print("Mean Squared Error:", mse)
+
+
+# Query the network with a specific input
+result = n.query([0.11,0.19,0.05])
 print(result)
 
 
